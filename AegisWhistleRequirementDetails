@@ -1,0 +1,1087 @@
+Part 1: System Overview & Architecture
+Executive Summary
+AegisWhistle is a comprehensive SaaS-based whistleblower platform that combines voice-driven
+reporting, blockchain security, and multi-tenant organization management. The platform leverages
+Hyperledger Fabric for secure, immutable record-keeping and provides anonymous reporting
+capabilities with crypto-based reward systems.
+
+
+─────────────────────────────────────────────────────────────────┐
+│ AegisWhistle SaaS Platform │
+├─────────────────────────────────────────────────────────────────┤
+│ Frontend Layer (React/Next.js) │
+│ ├── Public Landing Pages │
+│ ├── Organization Subdomains (org.aegiswhistle.com) │
+│ ├── Admin Dashboard │
+│ └── Professional Marketplace │
+├─────────────────────────────────────────────────────────────────┤
+│ API Gateway & Authentication Layer │
+│ ├── JWT Authentication │
+│ ├── Role-Based Access Control (RBAC) │
+│ ├── Rate Limiting & Security │
+│ └── Multi-tenant Routing │
+├─────────────────────────────────────────────────────────────────┤
+│ Backend Services (Node.js/Express) │
+│ ├── Organization Management Service │
+│ ├── User Management Service │
+│ ├── Voice Processing Service (VAPI + Gemini Live) │
+│ ├── Blockchain Integration Service │
+│ ├── Notification Service │
+│ ├── Crypto Wallet Service │
+│ └── Professional Marketplace Service │
+├─────────────────────────────────────────────────────────────────┤
+│ Data Layer │
+│ ├── PostgreSQL (User data, sessions, cache) │
+│ ├── Redis (Session storage, real-time data) │
+│ └── File Storage (AWS S3/CloudFlare R2) │
+├─────────────────────────────────────────────────────────────────┤
+│ Blockchain Layer (Per Organization) │
+│ ├── Hyperledger Fabric Network 1 (Org A) │
+│ ├── Hyperledger Fabric Network 2 (Org B) │
+│ ├── Cross-Network Bridge (Optional) │
+1.2 Multi-Tenant Architecture
+Organization Isolation Strategy:
+Separate Hyperledger Networks: Each organization gets its own Hyperledger Fabric network
+Subdomain Routing: {organization}.aegiswhistle.com
+Database Partitioning: Tenant-based data isolation in PostgreSQL
+Cross-Network Communication: Optional bridge for inter-organization channels
+2. User Roles & Permissions
+2.1 Platform Administrator (Super Admin)
+Role: AegisWhistle SaaS Platform Administrator
+Capabilities:
+Organization Management
+Approve/deny organization registrations
+Suspend/reactivate organizations
+Monitor platform-wide usage analytics
+│ └── Certificate Authority per Network │
+├─────────────────────────────────────────────────────────────────┤
+│ External Integrations │
+│ ├── VAPI (Voice AI) │
+│ ├── Google Gemini Live AI │
+│ ├── Crypto Wallets (MetaMask, WalletConnect) │
+│ ├── Payment Processors (Plaid, Stripe) │
+│ └── Email Services (SendGrid, AWS SES) │
+└─────────────────────────────────────────────────────────────────┘
+Manage subscription plans and billing
+User Oversight
+View all platform users (anonymized)
+Handle escalated support tickets
+Manage platform-wide security policies
+Override organization-level decisions (emergency only)
+System Administration
+Deploy new Hyperledger networks
+Manage platform updates and maintenance
+Configure global security settings
+Monitor system performance and health
+Professional Marketplace Management
+Verify professional service providers
+Manage marketplace categories and listings
+Handle disputes between organizations and professionals
+Set platform commission rates
+Compliance & Legal
+Generate compliance reports
+Manage legal document templates
+Handle law enforcement requests (with proper warrants)
+Maintain audit logs for regulatory purposes
+2.2 Organization-Level Roles
+Ethics Admin (Organization Owner)
+Create and configure organization
+Invite Ethics Officers and Investigators
+Configure bounty ranges and reward policies
+Access organization analytics and reports
+Manage professional service provider selections
+Configure anonymity settings for whistleblowers
+Ethics Officer
+Review and process complaints
+Assign cases to investigators
+Approve rewards and crypto transfers
+Communicate with whistleblowers anonymously
+Generate investigation reports
+Investigator
+Access assigned complaint details
+Query whistleblowers for additional information
+Update case status and findings
+Collaborate with external professional services
+Whistleblower (Anonymous)
+Submit voice/text complaints
+Follow up on existing reports
+Receive status updates and rewards
+Maintain complete anonymity (optional)
+2.3 Professional Service Providers
+Legal Professionals: Lawyers, legal advisors
+Medical Professionals: Doctors, psychiatrists, therapists
+Specialized Services: Chiropractors, acupuncturists, physical therapists
+Verification Requirements: Business licenses, certifications, background checks
+
+Core System Components
+3.1 Voice Processing System
+Primary Integration: VAPI
+
+// VAPI Configuration
+const vapiConfig = {
+model: "gpt-4",
+voice: "empathetic-female",
+systemPrompt: `You are an empathetic AI assistant helping someone report workplace conce
+- Encourage them without asking for personal information
+- Focus on the incident details
+- Provide emotional support
+- Generate a clear summary at the end`,
+maxDuration: 1800, // 30 minutes max
+transcriptionProvider: "deepgram",
+anonymousMode: true
+}
+
+Alternative Integration: Gemini Live AI
+
+// Gemini Live AI Configuration
+const geminiConfig = {
+model: "gemini-1.5-pro",
+audioConfig: {
+encoding: "LINEAR16",
+sampleRateHertz: 16000,
+languageCode: "en-US"
+},
+responseConfig: {
+responseType: "AUDIO_AND_TEXT",
+modalities: ["AUDIO", "TEXT"]
+}
+}
+
+Blockchain Integration Architecture
+Hyperledger Fabric Network Structure:
+javascript
+// Gemini Live AI Configuration
+const geminiConfig = {
+model: "gemini-1.5-pro",
+audioConfig: {
+encoding: "LINEAR16",
+sampleRateHertz: 16000,
+languageCode: "en-US"
+},
+responseConfig: {
+responseType: "AUDIO_AND_TEXT",
+modalities: ["AUDIO", "TEXT"]
+}
+}
+3.3 Crypto Wallet Integration
+Built-in Wallet System:
+yaml
+# Per-Organization Network Configuration
+organizations:
+- name: "AegisOrg1"
+mspid: "AegisOrg1MSP"
+peers:
+- peer0.aegisorg1.com
+- peer1.aegisorg1.com
+ca: ca.aegisorg1.com
+channels:
+- name: "complaints-channel"
+organizations: ["AegisOrg1"]
+chaincodes:
+- name: "complaint-management"
+- name: "reward-system"
+- name: "audit-trail"
+# Cross-Network Bridge (Optional)
+bridge:
+enabled: true
+allowedOrganizations: []
+crossChannelAccess: false
+External Wallet Integration:
+MetaMask Web3 integration
+WalletConnect protocol support
+Hardware wallet compatibility (Ledger, Trezor)
+4. Professional Marketplace Architecture
+4.1 Marketplace Structure
+javascript
+// Wallet Service Configuration
+const walletConfig = {
+supportedNetworks: ["ethereum", "polygon", "bsc"],
+supportedTokens: ["USDC", "USDT", "DAI", "ETH", "MATIC"],
+escrowContract: "0x...", // Smart contract for holding rewards
+minimumReward: 10, // USD equivalent
+maximumReward: 10000 // USD equivalent
+}
+4.2 Verification System
+Professional Verification Process:
+1. Initial Registration
+Business license verification
+Professional certification validation
+Background check (if required)
+Insurance verification
+Professional Marketplace
+├── Legal Services
+│ ├── Corporate Lawyers
+│ ├── Employment Law Specialists
+│ ├── Compliance Attorneys
+│ └── Legal Consultants
+├── Medical Services
+│ ├── Occupational Health Doctors
+│ ├── Mental Health Professionals
+│ ├── Psychiatrists
+│ └── Counselors
+├── Alternative Medicine
+│ ├── Chiropractors
+│ ├── Physical Therapists
+│ ├── Acupuncturists
+│ └── Wellness Coaches
+└── Specialized Services
+├── Private Investigators
+├── Forensic Accountants
+├── Technical Experts
+└── Industry Consultants
+2. Document Verification
+Automated document scanning (OCR)
+Third-party verification services
+Manual review by platform administrators
+3. Ongoing Monitoring
+Annual license renewal checks
+Client feedback and ratings
+Complaint handling system
+Performance metrics tracking
+5. Security & Privacy Architecture
+5.1 Anonymity Options
+Configurable Anonymity Levels:
+Level 1: Complete anonymity (no identity stored)
+Level 2: Encrypted identity (reversible by court order)
+Level 3: Pseudo-anonymous (internal tracking only)
+5.2 Data Encryption
+5.3 Audit Trail System
+Blockchain-based Immutable Logging:
+All user actions logged with timestamps
+Cryptographic proof of data integrity
+Non-repudiation for all transactions
+Compliance-ready audit reports
+Next Parts Preview
+Part 2: Detailed Use Case Flows & User Journeys Part 3: Hyperledger Fabric Data Structures &
+Smart Contracts Part 4: API Specifications & Frontend Integration Part 5: Implementation Plan &
+Deployment Strategy
+javascript
+// Encryption Configuration
+const encryptionConfig = {
+algorithms: {
+symmetric: "AES-256-GCM",
+asymmetric: "RSA-4096",
+hashing: "SHA-256"
+},
+keyManagement: {
+provider: "AWS KMS", // or H
+
+
+Part 2: Detailed Use Case Flows & User Journeys
+
+1. Organization Onboarding Flow
+1.1 Ethics Admin Registration & Setup
+mermaidsequenceDiagram
+    participant EA as Ethics Admin
+    participant SaaS as AegisWhistle SaaS
+    participant PA as Platform Admin
+    participant HLF as Hyperledger Fabric
+    participant CA as Certificate Authority
+
+    EA->>SaaS: Register Organization
+    Note over EA,SaaS: Domain: uber.aegiswhistle.com<br/>Bounty Range: $100-$5000<br/>Anonymity Level: Encrypted
+    
+    SaaS->>PA: Pending Approval Notification
+    PA->>SaaS: Approve Organization
+    
+    SaaS->>HLF: Initialize New Network
+    HLF->>CA: Generate Organization CA
+    CA-->>HLF: Return Certificates
+    
+    HLF->>SaaS: Network Ready
+    SaaS->>EA: Organization Activated
+    
+    EA->>SaaS: Configure Bounty Plans
+    EA->>SaaS: Invite Ethics Officers
+    EA->>SaaS: Invite Investigators
+    
+    SaaS->>HLF: Store Organization Config
+    Note over HLF: Immutable organization setup
+Detailed Steps:
+
+Initial Registration
+javascript// Organization Registration Payload
+const orgRegistration = {
+  organizationName: "Uber Technologies",
+  subdomain: "uber",
+  adminEmail: "ethics@uber.com",
+  domain: "uber.com",
+  bountyConfig: {
+    minReward: 100,
+    maxReward: 5000,
+    currency: "USD",
+    cryptoOptions: ["USDC", "ETH"]
+  },
+  anonymityLevel: "encrypted", // "complete", "encrypted", "pseudo"
+  businessType: "Technology",
+  employeeCount: "10000+",
+  complianceRequirements: ["SOX", "GDPR"]
+}
+
+Hyperledger Network Initialization
+bash# Automated network creation script
+./scripts/create-org-network.sh \
+  --org-name "uber" \
+  --peer-count 2 \
+  --orderer-count 1 \
+  --ca-enabled true \
+  --channels "complaints,rewards,audit"
+
+Certificate Authority Setup
+yaml# CA Configuration
+ca:
+  name: ca.uber.aegiswhistle.com
+  config:
+    csr:
+      cn: uber-ca
+      names:
+        - C: US
+          ST: California
+          L: San Francisco
+          O: Uber Technologies
+          OU: Ethics Department
+
+
+1.2 Team Member Onboarding
+mermaidflowchart TD
+    A[Ethics Admin Logs In] --> B[Access Team Management]
+    B --> C{Add Team Member}
+    C -->|Ethics Officer| D[Send Officer Invitation]
+    C -->|Investigator| E[Send Investigator Invitation]
+    
+    D --> F[Officer Accepts Invitation]
+    E --> G[Investigator Accepts Invitation]
+    
+    F --> H[Generate HLF Identity]
+    G --> H
+    
+    H --> I[Assign Certificates]
+    I --> J[Store in Blockchain]
+    J --> K[Team Member Active]
+
+2. Whistleblower Reporting Flow
+2.1 Voice-Powered Complaint Submission
+mermaidsequenceDiagram
+    participant WB as Whistleblower
+    participant UI as Web Interface
+    participant VAPI as VAPI Service
+    participant Gemini as Gemini Live AI
+    participant BE as Backend Service
+    participant HLF as Hyperledger
+    participant EO as Ethics Officer
+
+    WB->>UI: Access uber.aegiswhistle.com
+    UI->>WB: Display Voice Interface
+    
+    WB->>UI: Click "Speak Up" Button
+    UI->>VAPI: Initialize Voice Session
+    
+    alt Primary: VAPI Processing
+        VAPI->>WB: "Hello, I'm here to listen..."
+        WB->>VAPI: Voice Complaint
+        VAPI->>VAPI: Real-time Transcription
+        VAPI->>VAPI: Generate Summary
+        VAPI->>BE: Send Transcription + Summary
+    else Fallback: Gemini Live AI
+        UI->>Gemini: Initialize Audio Session
+        WB->>Gemini: Voice Input
+        Gemini->>Gemini: Audio to Text + Analysis
+        Gemini->>BE: Send Results
+    end
+    
+    BE->>BE: Generate 10-digit Report ID
+    BE->>HLF: Store Complaint (Encrypted)
+    BE->>WB: Return Report ID: "AG7X9M2K4P"
+    
+    HLF->>EO: New Complaint Notification
+    
+    Note over WB,EO: Whistleblower retains only Report ID<br/>No personal information stored
+Voice Agent Configuration:
+javascript// VAPI System Prompt
+const vapiSystemPrompt = `
+You are Aegis, an empathetic AI assistant helping someone report workplace concerns confidentially.
+
+GUIDELINES:
+- Be warm, understanding, and non-judgmental
+- NEVER ask for personal information (names, employee IDs, etc.)
+- Focus on the incident: What happened? When? Where? Who was involved?
+- Ask clarifying questions about the situation, not the person
+- Provide emotional support and reassurance
+- End with a clear summary of the incident
+- Remind them they'll receive a report ID to track progress
+
+CONVERSATION FLOW:
+1. Welcome and establish trust
+2. Listen to their concern
+3. Ask clarifying questions about the incident
+4. Summarize what you understood
+5. Confirm accuracy and provide next steps
+
+TONE: Professional yet caring, like a trusted counselor
+RESPONSE LENGTH: Keep responses concise but supportive
+`;
+
+// Gemini Live AI Configuration
+const geminiConfig = {
+  model: "gemini-1.5-pro",
+  systemInstruction: vapiSystemPrompt,
+  generationConfig: {
+    temperature: 0.7,
+    topK: 40,
+    topP: 0.95,
+    maxOutputTokens: 150,
+  },
+  safetySettings: [
+    {
+      category: "HARM_CATEGORY_HARASSMENT",
+      threshold: "BLOCK_MEDIUM_AND_ABOVE"
+    }
+  ]
+};
+2.2 Alternative Text-Based Reporting
+mermaidflowchart TD
+    A[Whistleblower Visits Site] --> B{Reporting Method}
+    B -->|Voice| C[Voice Interface - VAPI/Gemini]
+    B -->|Text| D[Text Form Interface]
+    
+    D --> E[Typeform-style Questions]
+    E --> F[What happened?]
+    F --> G[When did it occur?]
+    G --> H[Where did it happen?]
+    H --> I[Any witnesses?]
+    I --> J[Supporting evidence?]
+    
+    J --> K[Generate Summary]
+    K --> L[Create Report ID]
+    L --> M[Store in Blockchain]
+    M --> N[Notify Ethics Officer]
+Text Form Structure:
+javascriptconst reportForm = {
+  steps: [
+    {
+      id: "incident_type",
+      question: "What type of incident would you like to report?",
+      type: "select",
+      options: [
+        "Harassment", "Discrimination", "Fraud", 
+        "Safety Violation", "Policy Breach", "Other"
+      ]
+    },
+    {
+      id: "incident_description",
+      question: "Please describe what happened",
+      type: "textarea",
+      placeholder: "Describe the incident in detail...",
+      required: true
+    },
+    {
+      id: "incident_date",
+      question: "When did this incident occur?",
+      type: "date_range",
+      allowApproximate: true
+    },
+    {
+      id: "incident_location",
+      question: "Where did this incident take place?",
+      type: "text",
+      placeholder: "Building, floor, department, or general area"
+    },
+    {
+      id: "witnesses",
+      question: "Were there any witnesses?",
+      type: "textarea",
+      placeholder: "You don't need to provide names, just general information"
+    },
+    {
+      id: "evidence",
+      question: "Do you have any supporting evidence?",
+      type: "file_upload",
+      acceptedTypes: ["image/*", "application/pdf", "text/*"],
+      maxSize: "10MB",
+      optional: true
+    },
+    {
+      id: "impact",
+      question: "How has this incident affected you or others?",
+      type: "textarea",
+      optional: true
+    }
+  ]
+}
+
+3. Ethics Officer Workflow
+3.1 Complaint Review and Processing
+mermaidstateDiagram-v2
+    [*] --> NewComplaint: Complaint Received
+    
+    NewComplaint --> UnderReview: Officer Reviews
+    UnderReview --> AssignedToInvestigator: Needs Investigation
+    UnderReview --> Resolved: Simple Resolution
+    UnderReview --> Escalated: Serious Issue
+    
+    AssignedToInvestigator --> InvestigationInProgress: Investigator Assigned
+    InvestigationInProgress --> InvestigationComplete: Investigation Done
+    InvestigationComplete --> Resolved: Close Case
+    InvestigationComplete --> Escalated: Requires Escalation
+    
+    Escalated --> EscalationInProgress: External Alert Sent
+    EscalationInProgress --> Resolved: Final Resolution
+    
+    Resolved --> RewardProcessed: Reward Approved
+    RewardProcessed --> [*]: Case Closed
+    
+    note right of Resolved: All paths can lead to<br/>reward processing
+Ethics Officer Dashboard Actions:
+javascript// Available Actions for Ethics Officer
+const officerActions = {
+  viewComplaint: {
+    permissions: ["read_complaint", "view_transcript"],
+    data: {
+      reportId: "AG7X9M2K4P",
+      summary: "Employee reports harassment by supervisor...",
+      category: "harassment",
+      timestamp: "2025-05-24T10:30:00Z",
+      anonymityLevel: "encrypted"
+    }
+  },
+  
+  assignInvestigator: {
+    permissions: ["assign_cases"],
+    workflow: {
+      selectInvestigator: "internal | external",
+      addInstructions: "Investigation focus areas...",
+      setPriority: "low | medium | high | urgent",
+      setDeadline: "ISO date string"
+    }
+  },
+  
+  resolveCase: {
+    permissions: ["resolve_cases", "approve_rewards"],
+    requiredFields: {
+      resolutionSummary: "Company action taken...",
+      whistleblowerUpdate: "Anonymous message to reporter...",
+      rewardAmount: "0-5000 USD", // Based on org bounty config
+      rewardCurrency: "USDC | ETH | DAI"
+    }
+  },
+  
+  escalateCase: {
+    permissions: ["escalate_cases"],
+    options: {
+      internalEscalation: {
+        recipients: ["legal@company.com", "ceo@company.com"],
+        severity: "medium | high | critical"
+      },
+      externalEscalation: {
+        legalServices: "professional_marketplace",
+        medicalServices: "professional_marketplace",
+        lawEnforcement: "manual_process"
+      }
+    }
+  }
+}
+3.2 Reward Processing System
+mermaidsequenceDiagram
+    participant EO as Ethics Officer
+    participant RS as Reward Service
+    participant Wallet as Company Wallet
+    participant Crypto as Crypto Network
+    participant WB as Whistleblower
+
+    EO->>RS: Approve Reward ($500 USDC)
+    RS->>Wallet: Check Balance
+    Wallet-->>RS: Balance Available
+    
+    RS->>RS: Generate Anonymous Wallet
+    RS->>Crypto: Transfer USDC to Anonymous Wallet
+    Crypto-->>RS: Transaction Confirmed
+    
+    RS->>WB: Send Claim Instructions
+    Note over WB: Receives: Wallet private key<br/>+ Instructions to claim
+    
+    WB->>Crypto: Claim Reward (Optional)
+    
+    RS->>EO: Reward Processing Complete
+    RS->>HLF: Log Reward Transaction
+
+4. Investigator Workflow
+4.1 Investigation Process
+mermaidflowchart TD
+    A[Case Assigned to Investigator] --> B[Access Case Details]
+    B --> C[Review Complaint & Evidence]
+    C --> D{Needs Clarification?}
+    
+    D -->|Yes| E[Query Whistleblower]
+    E --> F[Wait for Response]
+    F --> G[Review Additional Info]
+    G --> C
+    
+    D -->|No| H[Conduct Investigation]
+    H --> I[Gather Evidence]
+    I --> J[Interview Relevant Parties]
+    J --> K[Document Findings]
+    
+    K --> L[Update Ethics Officer]
+    L --> M{Investigation Complete?}
+    M -->|No| H
+    M -->|Yes| N[Submit Final Report]
+    N --> O[Case Returned to Ethics Officer]
+Investigator Interface Actions:
+javascriptconst investigatorActions = {
+  queryWhistleblower: {
+    method: "anonymous_communication",
+    template: `Thank you for your report. To help us investigate thoroughly, 
+               could you please provide additional information about [specific question]?
+               
+               Your identity remains completely protected.`,
+    maxQueries: 5, // Prevent harassment
+    responseTimeout: "7 days"
+  },
+  
+  updateProgress: {
+    statusOptions: [
+      "investigation_started",
+      "gathering_evidence", 
+      "interviewing_parties",
+      "analysis_in_progress",
+      "investigation_complete"
+    ],
+    requiredFields: {
+      progressNotes: "What has been done so far...",
+      nextSteps: "What will be done next...",
+      estimatedCompletion: "ISO date",
+      blockingIssues: "Any obstacles or challenges..."
+    }
+  },
+  
+  requestProfessionalService: {
+    categories: ["legal", "medical", "technical", "forensic"],
+    process: {
+      selectProvider: "from_marketplace",
+      defineScope: "what_service_needed",
+      setUrgency: "standard | urgent | emergency",
+      approvalRequired: "ethics_officer | admin"
+    }
+  }
+}
+
+5. Professional Marketplace Integration
+5.1 Service Provider Onboarding
+mermaidsequenceDiagram
+    participant SP as Service Provider
+    participant MP as Marketplace
+    participant VS as Verification Service
+    participant PA as Platform Admin
+
+    SP->>MP: Register Professional Profile
+    MP->>VS: Initiate Verification Process
+    
+    VS->>VS: Check Business License
+    VS->>VS: Verify Certifications
+    VS->>VS: Background Check
+    VS->>VS: Insurance Verification
+    
+    VS-->>MP: Verification Results
+    MP->>PA: Pending Approval
+    PA->>MP: Approve/Reject Provider
+    
+    MP->>SP: Account Activated
+    SP->>MP: Set Availability & Rates
+    MP->>MP: Make Available to Organizations
+Professional Profile Structure:
+javascriptconst professionalProfile = {
+  basicInfo: {
+    businessName: "Smith Legal Services",
+    contactPerson: "John Smith, Esq.",
+    businessType: "Legal Services",
+    specialization: ["Employment Law", "Corporate Compliance"],
+    yearsOfExperience: 15,
+    location: {
+      city: "San Francisco",
+      state: "CA",
+      serviceRadius: "Bay Area + Remote"
+    }
+  },
+  
+  credentials: {
+    businessLicense: {
+      number: "BL123456",
+      state: "CA",
+      expirationDate: "2026-12-31",
+      verified: true
+    },
+    professionalLicense: {
+      barNumber: "12345",
+      state: "CA", 
+      status: "active",
+      verified: true
+    },
+    certifications: [
+      "Employment Law Specialist",
+      "Corporate Compliance Expert"
+    ],
+    insurance: {
+      provider: "LawPro Insurance",
+      coverage: "$2M Professional Liability",
+      verified: true
+    }
+  },
+  
+  serviceOffering: {
+    servicesProvided: [
+      "Legal consultation on workplace issues",
+      "Compliance review and recommendations", 
+      "Investigation support",
+      "Documentation review"
+    ],
+    pricing: {
+      consultationFee: "$300/hour",
+      retainerOptions: true,
+      emergencyRate: "$450/hour"
+    },
+    availability: {
+      businessHours: "Mon-Fri 9AM-6PM PST",
+      emergencyAvailable: true,
+      responseTime: "Within 4 hours"
+    }
+  }
+}
+5.2 Service Request and Fulfillment
+mermaidsequenceDiagram
+    participant Org as Organization Admin
+    participant MP as Marketplace
+    participant SP as Service Provider
+    participant Case as Case Management
+
+    Org->>MP: Browse Available Services
+    MP-->>Org: Show Verified Providers
+    
+    Org->>MP: Request Service
+    Note over Org,MP: Case: "Sexual harassment investigation"<br/>Need: "Legal consultation"<br/>Budget: "$2000"<br/>Urgency: "High"
+    
+    MP->>SP: Service Request Notification
+    SP->>MP: Accept/Decline Request
+    
+    alt Service Accepted
+        MP->>Org: Provider Assigned
+        MP->>Case: Link Provider to Case
+        SP->>Org: Direct Communication Established
+        SP->>Org: Provide Services
+        Org->>SP: Payment via Platform
+        SP->>MP: Service Completed
+        Org->>MP: Rate & Review Service
+    else Service Declined
+        MP->>Org: Find Alternative Provider
+    end
+
+6. Cross-Network Communication (Advanced Feature)
+6.1 Inter-Organization Channel Access
+mermaidflowchart TD
+    A[Organization A Network] --> B[Bridge Service]
+    C[Organization B Network] --> B
+    
+    B --> D{Permission Check}
+    D -->|Authorized| E[Create Cross-Channel]
+    D -->|Unauthorized| F[Access Denied]
+    
+    E --> G[Shared Investigation Channel]
+    G --> H[Collaborative Case Work]
+    H --> I[Synchronized Audit Trail]
+Use Cases for Cross-Network Access:
+
+Industry-wide investigations (multiple companies affected)
+Supply chain compliance (vendor-client relationships)
+Regulatory investigations (government oversight)
+Joint legal proceedings (class-action scenarios)
+
+=============
+Aegis Whistle Code prompt
+============
+1.SaaS
+🔹 Aegis Whistle — Voice-Driven Whistleblower Platform
+Empower voices. Protect the truth. Reward integrity.
+Ethics admin of the company should be able to sign up giving the sub domain of the company
+Like uber.AegisWhistle.com
+They can suggest the bounty plan ranges of the company while signing up
+2. Ethics admin company onboarding
+to close loop the sign up Ethics admin will onboard ethics officer and investigator
+Once after the admin is authenticated, he can invite Ethics Officer and Investigators
+He will also be able to modify the roles for Ethics Officer, Investigators
+3. Marketing
+Company should be able to generate barcode and promote their Ethics URL to their employees with
+bounty, theme and link information as poster
+4. 🗣 Voice-Powered Reporting via Aegis Voice Agent for whistleblower speakup
+🧭in the header, aegis logo in the left, on the right Team Aegis login button, followup button
+In the middle of the page, the Aegis Whistle speak-up component should be there.
+It should enable whistleblowers to speak, interact with the Aegis agent (VAPI powered) and confidentially
+submit complaints through natural voice conversations.
+There should be a write button provided as an alternative to the speak-up voice component for the
+whistleblower to send the complaint info thro a popup window.
+Whistleblowers should have the option to document their issue through the write option instead voice.
+If the window can ask the info of the complaint thro typeform like user experience it will be cool.
+Bottom of the page there can be big bold dashboard icon indicators of open complaints, resolved cases,
+reward issued so far, bounty open still can be displayed in four diff boxes.
+4a.VAPI voice agent
+Voice Agent should have a empathetic tone.
+It should discourage people to share their personal info
+It should not record and save the voice
+It should transcribes and summarizes complaints in real-time and sends it to the Ethics Officer
+It should automatically tags issue categories (e.g. harassment, fraud, policy violations)
+Ensures anonymity and tamper-proof logging
+How VAPI system prompt, workflow, api, private, public keys can be configured need to be guided.
+5. Team Aegis- Ethics officer login
+All 3 roles Ethics Admin, Ethics Officer, Inverigators will login thro the same button in the header
+Dashboard top should have large iconic buttons with latest open complaints, resolved cases, reward
+issued so far, bounty open displayed in 4 buttons.
+Reward component should have more button through which ethics officer should be able to see how
+many rewards are dispatched, along with the repord id, title, summary and amount
+Also the bounty component should have add money button, a plaid in
+For Ethics officer role,
+A clean, intuitive interface where Ethics Officers can:
+View AI-generated summaries of voice complaints
+Listen to raw audio or review transcript
+Assign case to internal or external investigators
+Mark case as resolved, escalated, or under review
+Reward whistleblowers anonymously via crypto transfer from a connected company wallet
+Whistleblower gets 10 digit alphanumeric code as report id through VAPI itself when the conversation
+ends. The report code generation can happen as the ethic officer module receives the summary from the
+voice agent transcription api.
+Future Feature: if voice api can give context to the
+summary of the transcript and suggest it’s own
+thinking for the investigation, it can enable ethics
+offcer and reduce the dependence with investigators
+Major actions are only 3: Assign, Resolve, Escalate
+Assign button: will be able to select from the organization’s list of investigators and assign it for deeper
+views
+Resolve/Reward button: they can add a summary of their views as resolution for the company
+documentation and close the case.
+In case of no reward, they can leave the reward field empty. They can add a small greeting to the
+whistleblower as the update for the whistleblower.
+● Company update
+● Whistleblower update
+● Reward amount
+Escalate button: can give popup with email integration where ethics officer should be able to alert
+someone inside the company and get their thoughts
+💸 Incentive Layer
+Resolve button:, Ethics Officers can: Trigger anonymous dollar reward for valid disclosures, the dollar
+should get converted as crypto in the preferred coin format of the whistleblower
+6.󰡷 Investigator Workspace
+Once assigned, investigators can:
+Access full complaint details and attachments
+Add notes, status updates
+All actions are logged with timestamped audit trail
+Query button: Investigators should be able to query back to the whistleblowers with their doubts on the
+case reported, ask the whistleblower in a delicate tone to provide artifacts to supplement their through
+investigation
+update/Finish button: it should allow investigators to pass investigation update to the ethics officer. In
+case if they dont have any more update, they can click the finish button inside the update screen itself
+7. Whistleblower follow-up
+Whistleblower will have a feature to followup, provide update to the investigator queries, also know about
+the status of the investigation and also any possible reward
+Instead of Text Update: Whistleblower should be able to continue speak through Aegis voice AI
+agent and add the updates also. The agent should be able to refer back to the old summary and
+talk with the context.
+============
+Not needed
+========
+✅ Design & Access Features
+Open dashboard access (for now) with read/write controls based on role logic
+Light color scheme: neutral whites, soft grays, light blues
+Minimalist layout, accessible UX, voice summary front-and-center
+Designed for transparency, clarity, and ethical compliance
+=======
+connect the make a report button of the site link with vapi agent id
+17195059-600b-4a2e-90b3-ab63c05a6837
+Connect the 'Make a Report' button to the VAPI Agent ID: 17195059-600b-4a2e-90b3-ab63c05a6837
+Looking at the code, the "Make a Report" button is already connected to the
+VAPI Agent with ID 17195059-600b-4a2e-90b3-ab63c05a6837
+vapi public api key 6b3e7486-6bd4-4521-b010-4d4ea7bf2f48
+private key 6fba00f3-7b26-41cc-aad9-be7aefa639a7
+The "Make a Report" button in the CTA section is now connected to a handleMakeReport function that
+smoothly scrolls to the VAPI Agent component when clicked:
+also give me cred to login to the Ethics officer dashboard, also some sample credentials for investigator
+too
+also the complaints made by whistleblower is not showing in the ethics officer dashboard, can you fix it
+and test whether it can be assigned to the test investigator and he can access it for updating in his loging
+Please test so that vapi script will not give the not loading error, also “please refresh the page" error
+Refactor src/pages/Dashboard.tsx into smaller files without breaking any functionality. Make sure to
+delete any unused imports or files after the operation is done.
+Refactor src/pages/CaseDetail.tsx into smaller files without breaking any functionality. Make sure to
+delete any unused imports or files after the operation is done.
+Enhance the StatCard.tsx component with an icon prop that allows users to specify a Lucide icon to
+display next to the title.
+======
+Make use of the code for connecting a website with a VAPI (Voice API) agent that sends summaries to
+an Ethics officer dashboard. I'll implement both frontend and backend components for this integration.
+VAPI Agent Integration Code
+Code
+// Frontend JavaScript for website integration with VAPI agent
+// Configuration
+const config = {
+vapiBaseUrl: "https://api.vapi.ai", // Replace with your VAPI endpoint
+ethicsDashboardUrl: "https://ethics-dashboard.example.com/api/summaries", //
+Now let's create the backend code for the Ethics officer dashboard integration and the HTML structure for
+the website:
+Drafting artifact...
+// Frontend JavaScript for website integration with VAPI agent
+// Configuration
+const config = {
+vapiBaseUrl: "https://api.vapi.ai", // Replace with your VAPI endpoint
+ethicsDashboardUrl: "https://ethics-dashboard.example.com/api/summaries", // Replace with your
+dashboard endpoint
+apiKey: "YOUR_API_KEY", // Replace with your actual API key
+agentId: "your-agent-id" // Replace with your VAPI agent ID
+};
+// Initialize VAPI agent on page load
+document.addEventListener('DOMContentLoaded', () => {
+initializeVapiAgent();
+setupEventListeners();
+});
+// Initialize the VAPI agent
+function initializeVapiAgent() {
+// Load VAPI SDK
+const script = document.createElement('script');
+script.src = `${config.vapiBaseUrl}/sdk.js`;
+script.async = true;
+script.onload = () => {
+console.log("VAPI SDK loaded successfully");
+// Initialize VAPI with configuration
+window.VAPI.init({
+apiKey: config.apiKey,
+agentId: config.agentId,
+// Optional configuration
+enableTranscript: true,
+enableSummary: true,
+language: 'en-US'
+});
+};
+document.head.appendChild(script);
+}
+// Setup event listeners for VAPI agent interactions
+function setupEventListeners() {
+// Listen for conversation start
+document.getElementById('start-conversation').addEventListener('click', () => {
+startVapiConversation();
+});
+// Listen for conversation end
+document.getElementById('end-conversation').addEventListener('click', () => {
+endVapiConversation();
+});
+}
+// Start a conversation with the VAPI agent
+function startVapiConversation() {
+if (!window.VAPI) {
+console.error("VAPI not loaded");
+return;
+}
+// Start the conversation
+window.VAPI.start({
+onStart: () => {
+console.log("Conversation started");
+updateUIForActiveConversation();
+},
+onError: (error) => {
+console.error("VAPI error:", error);
+displayErrorMessage(error.message);
+}
+});
+}
+// End the conversation and send summary to Ethics dashboard
+function endVapiConversation() {
+if (!window.VAPI) {
+console.error("VAPI not loaded");
+return;
+}
+window.VAPI.stop({
+onStop: (data) => {
+console.log("Conversation stopped", data);
+updateUIForEndedConversation();
+// Extract summary from conversation data
+if (data && data.summary) {
+sendSummaryToEthicsDashboard(data.summary, data.conversationId);
+} else {
+console.warn("No summary available from VAPI conversation");
+}
+},
+onError: (error) => {
+console.error("Error stopping VAPI conversation:", error);
+}
+});
+}
+// Send the conversation summary to the Ethics dashboard
+async function sendSummaryToEthicsDashboard(summary, conversationId) {
+try {
+// Enrich summary with metadata
+const enrichedSummary = {
+content: summary,
+conversationId: conversationId,
+timestamp: new Date().toISOString(),
+source: window.location.href,
+userId: getUserId(), // Implement this function to get current user ID
+agentId: config.agentId
+};
+// Send to Ethics dashboard
+const response = await fetch(config.ethicsDashboardUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `Bearer ${config.apiKey}`
+},
+body: JSON.stringify(enrichedSummary)
+});
+if (!response.ok) {
+throw new Error(`Failed to send summary: ${response.status} ${response.statusText}`);
+}
+const result = await response.json();
+console.log("Summary sent to Ethics dashboard", result);
+// Display confirmation to user if needed
+if (result.reward) {
+displayRewardNotification(result.reward);
+}
+} catch (error) {
+console.error("Error sending summary to Ethics dashboard:", error);
+// Implement retry logic if needed
+}
+}
+// Helper UI functions
+function updateUIForActiveConversation() {
+const startButton = document.getElementById('start-conversation');
+const endButton = document.getElementById('end-conversation');
+const statusIndicator = document.getElementById('conversation-status');
+startButton.disabled = true;
+endButton.disabled = false;
+statusIndicator.textContent = 'Conversation active';
+statusIndicator.className = 'status-active';
+}
+function updateUIForEndedConversation() {
+const startButton = document.getElementById('start-conversation');
+const endButton = document.getElementById('end-conversation');
+const statusIndicator = document.getElementById('conversation-status');
+startButton.disabled = false;
+endButton.disabled = true;
+statusIndicator.textContent = 'Conversation ended';
+statusIndicator.className = 'status-inactive';
+}
+function displayErrorMessage(message) {
+const errorContainer = document.getElementById('error-container');
+errorContainer.textContent = `Error: ${message}`;
+errorContainer.style.display = 'block';
+// Hide after 5 seconds
+setTimeout(() => {
+errorContainer.style.display = 'none';
+}, 5000);
+}
+function displayRewardNotification(reward) {
+const rewardContainer = document.getElementById('reward-notification');
+rewardContainer.textContent = `You've earned a reward: ${reward.type} - ${reward.description}`;
+rewardContainer.style.display = 'block';
+// Hide after 8 seconds
+setTimeout(() => {
+rewardContainer.style.display = 'none';
+}, 8000);
+}
+function getUserId() {
+// Implement based on your authentication system
+// This could be from a JWT token, session cookie, etc.
+return localStorage.getItem('userId') || 'anonymous-user';
+}

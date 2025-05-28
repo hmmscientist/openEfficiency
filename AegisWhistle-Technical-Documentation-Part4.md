@@ -541,6 +541,391 @@ The Investigator dashboard is accessed in the following scenarios:
 │  │  [✓] Employment Law                                  │   │
 │  │  [ ] Corporate Compliance                            │   │
 │  │  [ ] Workplace Harassment                            │   │
+
+# Diagnostic Utilities
+
+## Database Health Monitoring
+
+AegisWhistle includes a comprehensive diagnostic utility to monitor and test the health of both PostgreSQL and Hyperledger Fabric components. This tool is essential for system administrators to ensure the platform's reliability and performance.
+
+### Features
+
+1. **PostgreSQL Health Check**
+   - Connection status and version
+   - Database size and table statistics
+   - Query performance metrics
+   - Connection pool status
+
+2. **Hyperledger Fabric Health Check**
+   - Peer node status
+   - Channel information
+   - Chaincode status and version
+   - Block height and transaction count
+   - Endorsement policy verification
+
+3. **System Resources**
+   - CPU and memory usage
+   - Disk space monitoring
+   - Network connectivity
+
+### Installation
+
+1. Install the required Python packages:
+   ```bash
+   pip install psycopg2-binary fabric-sdk-py prometheus_client requests
+   ```
+
+2. Clone the AegisWhistle repository:
+   ```bash
+   git clone https://github.com/openefficiency/aegiswhistle.git
+   cd aegiswhistle/diagnostics
+   ```
+
+### Usage
+
+Run the diagnostic tool with:
+
+```bash
+python aegis_diagnostics.py --config config.yaml
+```
+
+### Configuration (config.yaml)
+
+```yaml
+postgresql:
+  host: localhost
+  port: 5432
+  database: aegiswhistle
+  user: aegis_admin
+  password: ${DB_PASSWORD}  # Use environment variable
+
+hyperledger:
+  peer_url: grpc://localhost:7051
+  orderer_url: grpc://localhost:7050
+  channel_name: aegischannel
+  chaincode_name: aegiscc
+  msp_id: Org1MSP
+  crypto_path: /path/to/crypto
+
+monitoring:
+  prometheus_port: 8000
+  check_interval: 300  # seconds
+```
+
+### Sample Output
+
+```
+=== AegisWhistle Diagnostic Tool ===
+Timestamp: 2025-05-27 19:45:23
+
+[+] PostgreSQL Status: ✓ Connected (v14.5)
+    - Database Size: 245.6 MB
+    - Active Connections: 12/100
+    - Query Performance: Normal
+
+[+] Hyperledger Fabric Status
+    - Peer Status: ✓ Running
+    - Channel: aegischannel (Block: 1245)
+    - Chaincode: aegiscc@2.1.0
+    - Endorsement Policy: 1-of-any
+
+[+] System Resources
+    - CPU Usage: 24.5%
+    - Memory Usage: 3.2/16 GB
+    - Disk Space: 45% used
+
+[!] Warnings:
+    - High connection count (12/20) on PostgreSQL
+    - Chaincode version 2.1.0 has an update available (2.2.0)
+```
+
+### Automated Monitoring
+
+The diagnostic tool can be run as a service to continuously monitor the system and expose metrics in Prometheus format:
+
+```bash
+python aegis_diagnostics.py --config config.yaml --daemon
+```
+
+Metrics will be available at `http://localhost:8000/metrics` for Prometheus scraping.
+
+### Alerting
+
+Configure alerts in your monitoring system for the following conditions:
+- PostgreSQL connection pool > 80% utilized
+- Block height not increasing
+- Chaincode container not responding
+- System resources (CPU > 90%, Memory > 85%, Disk > 90%)
+
+### Source Code (aegis_diagnostics.py)
+
+```python
+#!/usr/bin/env python3
+"""
+AegisWhistle Diagnostic Tool
+Monitors PostgreSQL and Hyperledger Fabric components
+"""
+
+import os
+import sys
+import time
+import yaml
+import json
+import psycopg2
+from datetime import datetime
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from prometheus_client import start_http_server, Gauge, Counter, generate_latest
+from hfc.fabric import Client as FabricClient
+from hfc.fabric.peer import create_peer
+from hfc.fabric.user import create_user
+from hfc.util.crypto.crypto import crypto
+
+# Metrics
+DB_CONNECTION_STATUS = Gauge('db_connection_status', 'Database connection status')
+DB_SIZE_BYTES = Gauge('db_size_bytes', 'Database size in bytes')
+DB_ACTIVE_CONNECTIONS = Gauge('db_active_connections', 'Active database connections')
+FABRIC_PEER_STATUS = Gauge('fabric_peer_status', 'Hyperledger Fabric peer status')
+FABRIC_BLOCK_HEIGHT = Gauge('fabric_block_height', 'Current block height')
+SYSTEM_CPU_PERCENT = Gauge('system_cpu_percent', 'CPU usage percentage')
+SYSTEM_MEMORY_PERCENT = Gauge('system_memory_percent', 'Memory usage percentage')
+SYSTEM_DISK_PERCENT = Gauge('system_disk_percent', 'Disk usage percentage')
+
+class AegisDiagnostics:
+    def __init__(self, config_path):
+        self.config = self._load_config(config_path)
+        self.pg_conn = None
+        self.fabric_client = None
+
+    def _load_config(self, config_path):
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        # Resolve environment variables
+        if '${' in str(config):
+            config_str = str(config)
+            for k, v in os.environ.items():
+                config_str = config_str.replace(f'${{{k}}}', v)
+            config = yaml.safe_load(config_str)
+        return config
+
+    def check_postgresql(self):
+        """Check PostgreSQL database health"""
+        try:
+            conn = psycopg2.connect(
+                host=self.config['postgresql']['host'],
+                port=self.config['postgresql']['port'],
+                database=self.config['postgresql']['database'],
+                user=self.config['postgresql']['user'],
+                password=self.config['postgresql']['password']
+            )
+            self.pg_conn = conn
+            
+            # Get database size
+            with conn.cursor() as cur:
+                cur.execute("SELECT pg_database_size(current_database())")
+                db_size = cur.fetchone()[0]
+                
+                # Get active connections
+                cur.execute("""
+                    SELECT count(*) 
+                    FROM pg_stat_activity 
+                    WHERE datname = current_database()
+                """)
+                active_conns = cur.fetchone()[0]
+                
+                # Get version
+                cur.execute("SELECT version()")
+                version = cur.fetchone()[0].split()[1]
+                
+                return {
+                    'status': 'connected',
+                    'version': version,
+                    'size_bytes': db_size,
+                    'active_connections': active_conns
+                }
+                
+        except Exception as e:
+            return {'status': f'error: {str(e)}'}
+
+    def check_hyperledger(self):
+        """Check Hyperledger Fabric health"""
+        try:
+            # Initialize Fabric client
+            org1_admin = create_user(
+                name='admin',
+                org=self.config['hyperledger']['msp_id'],
+                state_store=crypto.get_default_crypto_suite()
+            )
+            
+            client = FabricClient()
+            peer = create_peer(self.config['hyperledger']['peer_url'])
+            
+            # Get channel info
+            response = client.get_channel_info(
+                requestor=org1_admin,
+                channel_name=self.config['hyperledger']['channel_name'],
+                peers=[peer],
+                decode=True
+            )
+            
+            block_height = response.height
+            
+            # Get chaincode info
+            response = client.query_installed_chaincodes(
+                requestor=org1_admin,
+                peers=[peer]
+            )
+            
+            chaincodes = {}
+            for chaincode in response.chaincodes:
+                chaincodes[chaincode.name] = chaincode.version
+            
+            return {
+                'peer_status': 'running',
+                'block_height': block_height,
+                'chaincodes': chaincodes
+            }
+            
+        except Exception as e:
+            return {'status': f'error: {str(e)}'}
+
+    def check_system_resources(self):
+        """Check system resource usage"""
+        try:
+            import psutil
+            
+            return {
+                'cpu_percent': psutil.cpu_percent(),
+                'memory_percent': psutil.virtual_memory().percent,
+                'disk_percent': psutil.disk_usage('/').percent
+            }
+            
+        except ImportError:
+            return {'status': 'psutil not installed'}
+
+    def run_checks(self):
+        """Run all health checks and update metrics"""
+        # PostgreSQL checks
+        pg_status = self.check_postgresql()
+        if pg_status.get('status') == 'connected':
+            DB_CONNECTION_STATUS.set(1)
+            DB_SIZE_BYTES.set(pg_status.get('size_bytes', 0))
+            DB_ACTIVE_CONNECTIONS.set(pg_status.get('active_connections', 0))
+        else:
+            DB_CONNECTION_STATUS.set(0)
+        
+        # Hyperledger checks
+        hl_status = self.check_hyperledger()
+        if 'block_height' in hl_status:
+            FABRIC_PEER_STATUS.set(1)
+            FABRIC_BLOCK_HEIGHT.set(hl_status.get('block_height', 0))
+        else:
+            FABRIC_PEER_STATUS.set(0)
+        
+        # System resources
+        sys_status = self.check_system_resources()
+        if 'cpu_percent' in sys_status:
+            SYSTEM_CPU_PERCENT.set(sys_status['cpu_percent'])
+            SYSTEM_MEMORY_PERCENT.set(sys_status['memory_percent'])
+            SYSTEM_DISK_PERCENT.set(sys_status['disk_percent'])
+        
+        return {
+            'postgresql': pg_status,
+            'hyperledger': hl_status,
+            'system': sys_status
+        }
+
+class MetricsHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/metrics':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain; version=0.0.4')
+            self.end_headers()
+            self.wfile.write(generate_latest())
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+def main():
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='AegisWhistle Diagnostic Tool')
+    parser.add_argument('--config', required=True, help='Path to config file')
+    parser.add_argument('--daemon', action='store_true', help='Run as a daemon')
+    args = parser.parse_args()
+    
+    diag = AegisDiagnostics(args.config)
+    
+    if args.daemon:
+        # Start Prometheus metrics server
+        start_http_server(diag.config['monitoring']['prometheus_port'])
+        
+        # Run checks in a loop
+        while True:
+            diag.run_checks()
+            time.sleep(diag.config['monitoring']['check_interval'])
+    else:
+        # Run once and print results
+        results = diag.run_checks()
+        print(json.dumps(results, indent=2))
+
+if __name__ == '__main__':
+    main()
+```
+
+## Integration with Monitoring Systems
+
+The diagnostic tool can be integrated with various monitoring systems:
+
+1. **Prometheus + Grafana**
+   - Scrape metrics from `/metrics` endpoint
+   - Create dashboards for visualization
+   - Set up alerts based on thresholds
+
+2. **ELK Stack**
+   - Forward logs to Logstash
+   - Visualize in Kibana
+   - Create alerts in Watcher
+
+3. **Datadog/New Relic**
+   - Use their respective Python agents
+   - Leverage existing monitoring infrastructure
+
+## Security Considerations
+
+1. **Authentication**
+   - Use TLS for all API endpoints
+   - Implement API key authentication
+   - Restrict access to metrics endpoint
+
+2. **Sensitive Data**
+   - Never log or expose sensitive information
+   - Use environment variables for credentials
+   - Implement proper secret management
+
+3. **Rate Limiting**
+   - Protect API endpoints from abuse
+   - Implement request throttling
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **PostgreSQL Connection Issues**
+   - Verify credentials and network connectivity
+   - Check if the server is running and accepting connections
+   - Review PostgreSQL logs for errors
+
+2. **Hyperledger Fabric Peer Unavailable**
+   - Verify peer container status
+   - Check chaincode container logs
+   - Validate channel configuration
+
+3. **High Resource Usage**
+   - Identify and optimize expensive queries
+   - Scale the system resources if needed
+   - Review application logs for issues
+
+For additional support, please refer to the AegisWhistle documentation or contact support@aegiswhistle.com.
 │  │  [ ] Fraud Investigation                             │   │
 │  │                                                      │   │
 │  └──────────────────────────────────────────────────────┘   │

@@ -23,10 +23,10 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - File upload capability (max 5MB)
    - Receive anonymous tracking ID (e.g., XK7F9P2Q1R)
    - Can follow up on reports using anonymous ID
-   - View blockchain transaction hash for report verification (Voice Agent tier and above)
    - Access to voice conversation reporting via VAPI integration (Voice Agent tier and above)
    - Access to video reporting via Tavus integration (Video Agent tier and above)
-   - Enhanced security features and audit trails (Video Agent tier and above)
+   - View blockchain transaction hash for report verification (Professional & Enterprise tiers only)
+   - Enhanced security features and audit trails (Professional & Enterprise tiers only)
    - No access to dashboard or organization features
    - All communications are end-to-end encrypted
    - IP addresses and metadata not logged for anonymous reports
@@ -44,8 +44,8 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Voice data processed in-memory, not stored unless explicitly saved
    - Anonymous IDs generated client-side for maximum privacy
    - File uploads scanned for malware
-   - Data stored on Hyperledger Fabric with access controls
-   - Private data collections protect sensitive information
+   - Data stored in configured database based on subscription tier (PostgreSQL for Core, additional options for higher tiers)
+   - Blockchain storage with access controls and private data collections (Professional & Enterprise tiers only)
 
 #### 2. **Ethics Officers ( Assigned by Organizational Administrator)**
    **Primary Responsibilities:**
@@ -523,7 +523,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
 │  └───────────────────────────────────────────────────────────────────────────────┘  │
 ├─────────────────────────────────────────────────────────────────────────────────────┤
 │  ┌───────────────────────────────────────────────────────────────────────────────┐  │
-│  │                       BLOCKCHAIN LAYER                                      │  │
+│  │              BLOCKCHAIN LAYER (Professional & Enterprise Only)               │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────┐      │  │
 │  │  │                  Per-Organization Networks                          │      │  │
 │  │  │  ┌───────────────┐  ┌────────────────┐  ┌─────────────────┐  │      │  │
@@ -576,11 +576,11 @@ graph TD
             S3[(S3 Storage)]
         end
         
-        %% Blockchain Networks
-        subgraph "Blockchain Layer"
-            HL1[Organization 1<br/>Hyperledger Network]
-            HL2[Organization 2<br/>Hyperledger Network]
-            HL3[Organization N<br/>Hyperledger Network]
+        %% Blockchain Networks (Professional & Enterprise Tiers Only)
+        subgraph "Blockchain Layer (Professional & Enterprise)"
+            HL1[Organization 1<br/>Hyperledger Network<br/>(Professional+ Only)]
+            HL2[Organization 2<br/>Hyperledger Network<br/>(Professional+ Only)]
+            HL3[Organization N<br/>Hyperledger Network<br/>(Professional+ Only)]
         end
     end
     
@@ -617,6 +617,9 @@ graph TD
     MRKT --> PG
     BLOCK --> HL1 & HL2 & HL3
     
+    %% Conditional Blockchain Connections (Professional & Enterprise Only)
+    note for BLOCK "Only available for Professional & Enterprise tiers"
+    
     %% External Integrations
     VOICE --> VAPI
     VIDEO --> TAVUS
@@ -647,7 +650,7 @@ graph TD
 - **Organization Service**: Multi-tenant management and configuration
 - **Voice Processing Service**: VAPI integration for voice report transcription and analysis
 - **Video Agent Service**: Tavus integration for video avatar interactions
-- **Blockchain Service**: Manages interactions with Hyperledger networks
+- **Blockchain Service**: Manages interactions with Hyperledger networks (Professional & Enterprise tiers only)
 - **Notification Service**: Real-time alerts and communications
 - **Payment Service**: Crypto rewards and payment processing
 - **Marketplace Service**: Professional services directory and booking
@@ -658,25 +661,27 @@ graph TD
 - **Redis**: Caching, rate limiting, and real-time features
 - **S3 Storage**: Secure file storage for evidence and documents
 
-**4. Blockchain Layer**
-- **Dedicated Hyperledger Networks**: One per organization
-- **Smart Contracts**: Custom chaincode for complaint management
-- **Private Data Collections**: For sensitive information
+**4. Blockchain Layer (Professional & Enterprise Tiers Only)**
+- **Dedicated Hyperledger Networks**: One per organization (Professional tier and above)
+- **Smart Contracts**: Custom chaincode for complaint management (Professional tier and above)
+- **Private Data Collections**: For sensitive information (Professional tier and above)
+- **Note**: Core and Voice/Video tiers use PostgreSQL/MySQL/MongoDB for data storage
 
 #### 2.1.4 Data Flow
 
 1. **Whistleblower Submission Flow**:
    - User submits report via web/mobile interface
-   - Voice reports processed by VAPI AI
-   - Video interactions handled by Tavus avatars
-   - Report hashed and stored on blockchain
+   - Voice reports processed by VAPI AI (Voice Agent tier and above)
+   - Video interactions handled by Tavus avatars (Video Agent tier and above)
+   - Report stored in configured database (PostgreSQL for Core tier, additional options for higher tiers)
+   - Report hashed and stored on blockchain (Professional & Enterprise tiers only)
    - Confirmation and tracking ID provided
 
 2. **Case Management Flow**:
    - Ethics Officer reviews and assigns cases
    - Investigators access case details
-   - Evidence collected and linked to blockchain
-   - Professional services booked through marketplace
+   - Evidence collected and stored in database (linked to blockchain for Professional & Enterprise tiers)
+   - Professional services booked through marketplace (Professional & Enterprise tiers)
    - Resolution and reward processing
 
 3. **Marketplace Operations**:
@@ -1810,9 +1815,9 @@ interface Report {
     uploaded_at: Date;
   }[];
   
-  // Blockchain integration
-  blockchain_hash: string;
-  blockchain_transaction_id: string;
+  // Blockchain integration (Professional & Enterprise tiers only)
+  blockchain_hash?: string; // Only for Professional & Enterprise tiers
+  blockchain_transaction_id?: string; // Only for Professional & Enterprise tiers
   
   // Status and workflow
   status: 'new' | 'under_review' | 'assigned' | 'in_progress' | 'pending_response' | 'resolved' | 'closed';
@@ -2456,7 +2461,7 @@ backend/
 │   │   │   ├── tavus.client.ts
 │   │   │   └── video.types.ts
 │   │   │
-│   │   ├── blockchain/
+│   │   ├── blockchain/                # Professional & Enterprise tiers only
 │   │   │   ├── blockchain.module.ts
 │   │   │   ├── blockchain.service.ts
 │   │   │   ├── blockchain.controller.ts
@@ -2518,7 +2523,7 @@ backend/
 │   │   └── modules/
 │   │       ├── voice.routes.ts
 │   │       ├── video.routes.ts
-│   │       ├── blockchain.routes.ts
+│   │       ├── blockchain.routes.ts    # Professional & Enterprise tiers only
 │   │       ├── analytics.routes.ts
 │   │       ├── rewards.routes.ts
 │   │       └── marketplace.routes.ts

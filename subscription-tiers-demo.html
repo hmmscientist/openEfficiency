@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisWhistle - Subscription Plans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .recommended-badge {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-gray-900">AegisWhistle</h1>
+                    </div>
+                    <nav class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">Dashboard</a>
+                        <a href="#" class="text-blue-600 border-b-2 border-blue-600 px-3 py-2 text-sm font-medium">Billing</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">Settings</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Admin: John Smith</span>
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">JS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Current Plan Status -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex-1">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Current Plan: Voice Agent</h2>
+                    <p class="text-gray-600 mb-4">$99/month • Next billing: March 15, 2024</p>
+                    
+                    <!-- Usage Metrics -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Departments</span>
+                                <span class="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">Near Limit</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-900 mb-2">3/3</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full progress-bar" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Users</span>
+                                <span class="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">High Usage</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-900 mb-2">47/50</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full progress-bar" style="width: 94%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Reports</span>
+                                <span class="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">This Month</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-900 mb-2">189/200</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full progress-bar" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Storage</span>
+                                <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Good</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-900 mb-2">8.7/10 GB</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full progress-bar" style="width: 87%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 lg:mt-0 lg:ml-6">
+                    <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        Upgrade Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plan Selection Header -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Choose Your AegisWhistle Plan</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Scale your whistleblower program with department-based organization and advanced features. 
+                Each plan includes dedicated team structures and compliance tools.
+            </p>
+            
+            <!-- Billing Toggle -->
+            <div class="flex items-center justify-center mt-6">
+                <span class="text-sm text-gray-600 mr-3">Monthly</span>
+                <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="toggleBilling()">
+                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1" id="billing-toggle"></span>
+                </button>
+                <span class="text-sm text-gray-600 ml-3">Annual</span>
+                <span class="ml-2 text-sm text-green-600 font-medium">Save 20%</span>
+            </div>
+        </div>
+
+        <!-- Subscription Tiers -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-12">
+            <!-- Core Plan -->
+            <div class="bg-white rounded-lg shadow-sm border card-hover relative">
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Core</h3>
+                        <div class="text-3xl font-bold text-gray-900">Free</div>
+                        <p class="text-sm text-gray-600 mt-1">Perfect for getting started</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>1 Department</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>2 Users</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>50 Reports/month</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>PostgreSQL</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>1GB Storage</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>Basic Support</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="space-y-2">
+                        <button class="w-full py-2 px-4 bg-gray-100 text-gray-500 rounded-md cursor-not-allowed">
+                            Current Plan
+                        </button>
+                        <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice Agent Plan -->
+            <div class="bg-white rounded-lg shadow-sm border card-hover relative">
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium recommended-badge">
+                        Recommended
+                    </span>
+                </div>
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Voice Agent</h3>
+                        <div class="text-3xl font-bold text-gray-900">
+                            $99
+                            <span class="text-sm text-gray-500 font-normal">/month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">AI-powered voice reporting</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>3 Departments</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>50 Users</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>200 Reports/month</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="mic" class="w-4 h-4 text-blue-500 mr-2"></i>
+                            <span><strong>Voice Reporting</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>PostgreSQL + MySQL</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>10GB Storage</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="space-y-2">
+                        <button class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium">
+                            Select Plan
+                        </button>
+                        <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Agent Plan -->
+            <div class="bg-white rounded-lg shadow-sm border card-hover relative">
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Video Agent</h3>
+                        <div class="text-3xl font-bold text-gray-900">
+                            $149
+                            <span class="text-sm text-gray-500 font-normal">/month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">Video avatar interactions</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>3 Departments</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>50 Users</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>500 Reports/month</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="video" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>Video Reporting</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>All Databases</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>25GB Storage</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="space-y-2">
+                        <button class="w-full py-2 px-4 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium">
+                            Select Plan
+                        </button>
+                        <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Plan -->
+            <div class="bg-white rounded-lg shadow-sm border card-hover relative">
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Professional</h3>
+                        <div class="text-3xl font-bold text-gray-900">
+                            $299
+                            <span class="text-sm text-gray-500 font-normal">/month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">Advanced compliance</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>10 Departments</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>200 Users</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>1,000 Reports/month</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="shield" class="w-4 h-4 text-orange-500 mr-2"></i>
+                            <span><strong>Blockchain</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="bar-chart" class="w-4 h-4 text-orange-500 mr-2"></i>
+                            <span><strong>Advanced Analytics</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>100GB Storage</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="space-y-2">
+                        <button class="w-full py-2 px-4 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium">
+                            Select Plan
+                        </button>
+                        <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="bg-white rounded-lg shadow-sm border card-hover relative">
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        Most Popular
+                    </span>
+                </div>
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                        <div class="text-3xl font-bold text-gray-900">
+                            $599
+                            <span class="text-sm text-gray-500 font-normal">/month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">Complete solution</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="infinity" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>Unlimited Departments</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="infinity" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>Unlimited Users</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="infinity" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>Unlimited Reports</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="star" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>All Features</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="users" class="w-4 h-4 text-purple-500 mr-2"></i>
+                            <span><strong>Marketplace</strong></span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            <span>500GB Storage</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="space-y-2">
+                        <button class="w-full py-2 px-4 gradient-bg text-white rounded-md hover:opacity-90 transition-opacity font-medium">
+                            Contact Sales
+                        </button>
+                        <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Comparison Table -->
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-900">Detailed Feature Comparison</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Features</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Core</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Voice</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Video</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Professional</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Departments</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">10</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Unlimited</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Ethics Officers per Dept</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">2</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Flexible</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Investigators per Dept</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">2</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">4</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">4</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">6</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Unlimited</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Voice Reporting</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Video Reporting</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Blockchain Integration</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Professional Marketplace</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mx-auto"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="text-xs text-gray-500">Limited</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mx-auto"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Department Structure Examples -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Department Structure Examples</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">HR Department</h4>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <div>• 1 Ethics Officer</div>
+                        <div>• 4 Investigators</div>
+                        <div>• Handles workplace harassment</div>
+                        <div>• Employee relations issues</div>
+                    </div>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">Finance Department</h4>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <div>• 1 Ethics Officer</div>
+                        <div>• 4 Investigators</div>
+                        <div>• Financial fraud detection</div>
+                        <div>• Compliance violations</div>
+                    </div>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">Operations Department</h4>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <div>• 1 Ethics Officer</div>
+                        <div>• 4 Investigators</div>
+                        <div>• Safety violations</div>
+                        <div>• Process improvements</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h3>
+            <div class="space-y-4">
+                <div class="border-b pb-4">
+                    <button class="flex items-center justify-between w-full text-left" onclick="toggleFAQ(1)">
+                        <span class="font-medium text-gray-900">Can I change my plan anytime?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500" id="faq-icon-1"></i>
+                    </button>
+                    <div class="mt-2 text-sm text-gray-600 hidden" id="faq-content-1">
+                        Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and billing is prorated.
+                    </div>
+                </div>
+                <div class="border-b pb-4">
+                    <button class="flex items-center justify-between w-full text-left" onclick="toggleFAQ(2)">
+                        <span class="font-medium text-gray-900">What happens if I exceed my limits?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500" id="faq-icon-2"></i>
+                    </button>
+                    <div class="mt-2 text-sm text-gray-600 hidden" id="faq-content-2">
+                        We'll notify you when you approach your limits. You can upgrade your plan or purchase additional capacity as needed.
+                    </div>
+                </div>
+                <div class="border-b pb-4">
+                    <button class="flex items-center justify-between w-full text-left" onclick="toggleFAQ(3)">
+                        <span class="font-medium text-gray-900">Is my data secure across all plans?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500" id="faq-icon-3"></i>
+                    </button>
+                    <div class="mt-2 text-sm text-gray-600 hidden" id="faq-content-3">
+                        Yes, all plans include enterprise-grade security with end-to-end encryption, secure data storage, and compliance with industry standards.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-sm text-gray-600">
+                <p>Need help choosing a plan? <a href="#" class="text-blue-600 hover:text-blue-700">Contact our sales team</a></p>
+                <p class="mt-2">All plans include 24/7 support and a 30-day money-back guarantee</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Toggle billing period
+        function toggleBilling() {
+            const toggle = document.getElementById('billing-toggle');
+            const isAnnual = toggle.classList.contains('translate-x-6');
+            
+            if (isAnnual) {
+                toggle.classList.remove('translate-x-6');
+                toggle.classList.add('translate-x-1');
+                // Update prices to monthly
+            } else {
+                toggle.classList.remove('translate-x-1');
+                toggle.classList.add('translate-x-6');
+                // Update prices to annual (20% discount)
+            }
+        }
+
+        // Toggle FAQ
+        function toggleFAQ(id) {
+            const content = document.getElementById(`faq-content-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Simulate plan selection
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Select Plan')) {
+                button.addEventListener('click', function() {
+                    const planName = this.closest('.card-hover').querySelector('h3').textContent;
+                    alert(`You selected the ${planName} plan! This would normally redirect to the configuration page.`);
+                });
+            }
+        });
+
+        // Add smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html> 

@@ -4,7 +4,7 @@
 
 This technical specification includes references to interactive demos and supplementary documentation:
 
-- **[Subscription Tiers Demo](../subscription-tiers-demo.html)** - Interactive HTML demo showcasing the complete subscription tier selection interface for Organization Administrators
+- **[Subscription Tiers Demo](subscription-tiers-demo.html)** - Interactive HTML demo showcasing the complete subscription tier selection interface for Organization Administrators
 - **[API-First Technical Document](API_FIRST_TECHNICAL_DOCUMENT.md)** - Comprehensive guide for frontend-agnostic architecture implementation
 - **[Subscription Tier Frontend Flow](SUBSCRIPTION_TIER_FRONTEND_FLOW.md)** - Detailed frontend user experience flow documentation
 
@@ -23,7 +23,10 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - File upload capability (max 5MB)
    - Receive anonymous tracking ID (e.g., XK7F9P2Q1R)
    - Can follow up on reports using anonymous ID
-   - View blockchain transaction hash for report verification
+   - View blockchain transaction hash for report verification (Voice Agent tier and above)
+   - Access to voice conversation reporting via VAPI integration (Voice Agent tier and above)
+   - Access to video reporting via Tavus integration (Video Agent tier and above)
+   - Enhanced security features and audit trails (Video Agent tier and above)
    - No access to dashboard or organization features
    - All communications are end-to-end encrypted
    - IP addresses and metadata not logged for anonymous reports
@@ -44,7 +47,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Data stored on Hyperledger Fabric with access controls
    - Private data collections protect sensitive information
 
-#### 2. **Ethics Officers**
+#### 2. **Ethics Officers ( Assigned by Organizational Administrator)**
    **Primary Responsibilities:**
    - Central oversight of all reported cases within organization
    - Case review and initial assessment
@@ -75,7 +78,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Secure communication channels with investigators
    - Encrypted access to sensitive case information
 
-#### 3. **Investigators**
+#### 3. **Investigators (Assigned by Organizational Administrator)**
    **Primary Responsibilities:**
    - Detailed case investigation and evidence gathering
    - Direct communication with whistleblowers (when permitted)
@@ -106,16 +109,19 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Secure collaboration channels
    - Service request and approval workflow
 
-#### 4. **Organization Administrators**
+#### 4. **Organization Administrators (Subscription Admin)**
    **Primary Responsibilities:**
    - Initial organization setup and configuration after account activation
    - Organization profile creation with name and subdomain generation (<orgname>@aegiswhistle.com)
    - Organization-wide system configuration
-   - Professional service provider selection and management per department
+   - Professional service provider which is optional (marketplace) selection and management per department
    - Team management and role assignments (Ethics Officers or Investigators)
    - Billing and subscription management
    - Compliance settings and monitoring
    - Analytics and reporting oversight
+   - Company wallet management and funding through saved billing details (credit/debit card or bank account)
+   - Reward pool funding and management
+   
 
    **Admin Dashboard Features:**
    - Organization metrics (Active Cases, Total Reports, Reward Budget, Team Members)
@@ -149,7 +155,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Inter-department communication settings
    - Department-specific notification preferences
 
-#### 5. **Professional Service Providers**
+#### 5. **Professional Service Providers (Marketplace)**
    **Service Categories:**
    - Legal Services (Employment Law, Corporate Compliance, Workplace Harassment)
    - Medical Services (Workplace Health, Psychological Support)
@@ -172,7 +178,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    - Payment and billing management
    - Review and feedback system
 
-#### 6. **AegisWhistle System Administrators**
+#### 6. **AegisWhistle System Administrators (SAAS / System Admin)**
    **Platform-Level Responsibilities:**
    - Multi-organization platform management
    - System health monitoring and maintenance
@@ -190,119 +196,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
 
 ### 1.2 Enhanced User Flows
 
-#### 1. **Voice Reporting Flow**
-   ```
-   Whistleblower Access Website
-   ↓
-   Click "Speak Up" Button
-   ↓
-   Choose Anonymity Level (Anonymous/Identified)
-   ↓
-   Select Report Method (Voice Conversation/Written)
-   ↓
-   VAPI Voice Agent Activation
-   ↓
-   Natural Conversation & Real-time Transcription
-   ↓
-   VAPI Returns Final Transcript
-   ↓
-   Store Transcript in Database
-   ↓
-   AI Summary & Automatic Categorization
-   ↓
-   Generate Anonymous Report ID
-   ↓
-   Store in configured database (PostgreSQL/MySQL/MongoDB/Hyperledger Fabric based on organization's subscription plan)
-   ↓
-   Display Tracking ID to Whistleblower
-   ↓
-   Make Transcript Visible in Respective Dashboards:
-     - Whistleblower Dashboard
-     - Investigator Dashboard
-     - Ethics Officer Dashboard
-   ↓
-   Notify Ethics Officer of New Report
-   ```
-
-#### 2. **Video Reporting Flow**
-   ```
-   Whistleblower Access Website
-   ↓
-   Click "Speak Up" Button
-   ↓
-   Choose Anonymity Level (Anonymous/Identified)
-   ↓
-   Select Report Method (Video Interview/Written)
-   ↓
-   Tavus Video Agent Activation
-   ↓
-   AI Avatar Interview & Real-time Processing
-   ↓
-   Video Recording & Transcription
-   ↓
-   Tavus Returns Processed Video & Transcript
-   ↓
-   Store Video & Transcript in S3 Storage
-   ↓
-   AI Analysis & Emotional Intelligence Processing
-   ↓
-   Generate Anonymous Report ID
-   ↓
-   Store Metadata in configured database (PostgreSQL/MySQL/MongoDB/Hyperledger Fabric based on organization's subscription plan)
-   ↓
-   Display Tracking ID to Whistleblower
-   ↓
-   Make Video & Transcript Available in Respective Dashboards:
-     - Whistleblower Dashboard
-     - Investigator Dashboard
-     - Ethics Officer Dashboard
-   ↓
-   Notify Ethics Officer of New Report
-   ```
-
-#### 2. **Professional Service Request Flow (marketplace)**
-   ```
-   Organizational Administrator logs in with organization-provided credentials
-   ↓
-   Access Professional Services Dashboard
-   ↓
-   Filter by Service Category & Specialization (Organization Administrator)
-   ↓
-   Review Provider Profiles (Credentials, Ratings, Availability)
-   ↓
-   Select Provider & Submit Service Request
-   ↓
-   Provider Notification & Response
-   ↓
-   Service Confirmation & Case Linking
-   ↓
-   Secure Collaboration Channel Creation
-   ↓
-   Service Delivery & Documentation
-   ↓
-   Payment Processing & Review Submission
-   ```
-
-#### 3. **Reward Processing Flow**
-   ```
-   Ethics Officer Case Review
-   ↓
-   Approve Reward Amount (e.g., $500 USDC)
-   ↓
-   Check Organization Wallet Balance
-   ↓
-   Generate Anonymous Crypto Wallet
-   ↓
-   Transfer Cryptocurrency to Anonymous Wallet
-   ↓
-   Record Transaction in Hyperledger Fabric
-   ↓
-   Send Claim Instructions to Whistleblower
-   ↓
-   Whistleblower Claims Reward (Optional)
-   ```
-
-#### 4. **Organization Onboarding Flow**
+#### 1. **Organization Onboarding Flow**
    ```
    Organizational Administrator Registration
    ↓
@@ -324,8 +218,7 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    ↓
    Go-Live & Training
    ```
-
-#### 5. **Case Management Flow**
+#### 2. **Case Management Flow**
    ```
    New Report Submission
    ↓
@@ -346,6 +239,212 @@ Based on the comprehensive diagrams and user interface designs, the system suppo
    Case Closure & Reward Processing
    ↓
    Final Documentation & Compliance Reporting
+   ```
+
+#### 3. **Web Reporting Flow**
+   ```
+   Whistleblower Access Aegis Portal
+   ↓
+   Click "Speak Up" Button
+   ↓
+   Choose Anonymity Level (Anonymous/Identified)
+   ↓
+   Select Report Method (Written)
+   ↓
+   Fill Report Form:
+     - Incident Description
+     - Date and Time
+     - Location
+     - Involved Parties
+     - Supporting Evidence Upload
+   ↓
+   Submit Report to Aegis website.
+   ↓
+   Generate 10-digit Alphanumeric Case ID
+   ↓
+   Store Report Data & Case ID in Database
+   ↓
+   Send Report Summary JSON to Ethics Officer Dashboard
+   ↓
+   Ethics Officer Review & Investigator Assignment
+   ↓
+   AI Summary & Automatic Categorization:
+     - Title Generation
+     - Summary Generation (Witness, Incident, Location)
+   ↓
+   Investigator Access Case Queue (AegisPortal/dashboard/Investigator)
+   ↓
+   Investigator-Employee Communication:
+     - Investigator Query
+     - Employee Response (Text/Attachments)
+   ↓
+   Investigator Submit Report:
+     - Investigation Findings
+     - Evidence Documentation
+     - Validity Assessment
+   ↓
+   Ethics Officer Final Resolution:
+     - Company Update (Internal Documentation)
+     - Employee Update (Closure Message)
+     - Optional Reward (Gift Card)
+   ↓
+   Case Closure & Employee Notification
+   ↓
+   Employee View Case Status & Reward Info (AegisPortal/Follow-up)
+   ```
+
+#### 4. **Voice Reporting Flow**
+   ```
+   Whistleblower Access Website
+   ↓
+   Click "Speak Up" Button
+   ↓
+   Choose Anonymity Level (Anonymous/Identified)
+   ↓
+   Select Report Method (Voice Conversation)
+   ↓
+   VAPI SDK Integration Initialization
+   ↓
+   Generate 10-digit Alphanumeric Case ID via Web Function
+   ↓
+   VAPI Agent Configuration:
+     - Load Case ID via Webhook/API
+     - Configure Voice Agent with Public Key
+     - Set up Real-time Transcription
+   ↓
+   Natural Conversation with VAPI Agent:
+     - Real-time Speech-to-Text
+     - Secure Session Management
+     - Automatic Case ID Association
+   ↓
+   VAPI Returns:
+     - Final Transcript
+     - Conversation Metadata
+     - Case ID Confirmation
+   ↓
+   Store in Database:
+     - Transcript
+     - Case ID
+     - Timestamp
+     - Anonymity Level
+   ↓
+   AI Processing:
+     - Generate Title
+     - Create Summary (Witness, Incident, Location)
+     - Categorize Report
+   ↓
+   Automatic Dashboard Updates:
+     - Ethics Officer Dashboard (AegisPortal/dashboard/ethics-officer)
+     - Investigator Dashboard
+     - Whistleblower Follow-up Portal
+   ↓
+   Real-time Notifications:
+     - Ethics Officer Alert
+     - Case ID Display to Whistleblower
+   ↓
+   Follow-up Integration:
+     - Whistleblower can check status via VAPI
+     - Investigator queries accessible through VAPI
+     - Voice response capability for follow-up questions
+   ```
+
+#### 5. **Video Reporting Flow**
+   ```
+   Whistleblower Access Website
+   ↓
+   Click "Speak Up" Button
+   ↓
+   Choose Anonymity Level (Anonymous/Identified)
+   ↓
+   Select Report Method (Video Interview)
+   ↓
+   Generate 10-digit Alphanumeric Case ID via Web Function
+   ↓
+   Tavus Video Agent Configuration:
+     - Load Case ID via Webhook/API/Interactions Protocol
+     - Configure Video Agent with Public Key
+     - Set up Real-time Processing
+   ↓
+   Natural Conversation with Tavus Agent:
+     - Real-time Video Recording
+     - Secure Session Management
+     - Automatic Case ID Association
+   ↓
+   Tavus Returns:
+     - Conversation Summary
+     - Case ID Confirmation
+   ↓
+   Store in S3 Storage:
+     - Transcript
+     - Case ID
+     - Timestamp
+     - Anonymity Level
+   ↓
+   AI Processing:
+     - Generate Title
+     - Create Summary (Witness, Incident, Location)
+     - Categorize Report
+   ↓
+   Automatic Dashboard Updates:
+     - Ethics Officer Dashboard (AegisPortal/dashboard/ethics-officer)
+     - Investigator Dashboard
+     - Whistleblower Follow-up Portal
+   ↓
+   Real-time Notifications:
+     - Ethics Officer Alert
+     - Case ID Display to Whistleblower
+   ↓
+   Follow-up Integration:
+     - Whistleblower can check status via VAPI
+     - Investigator queries accessible through VAPI
+     - Voice response capability for follow-up questions
+   ```
+
+#### 6. **Reward Processing Flow**
+   ```
+   Ethics Officer Case Review
+   ↓
+   Load Funds to Company Wallet:
+     - Select payment method (Bank/Card)
+     - Enter amount to load
+     - Process payment
+     - Update company wallet balance
+   ↓
+   Case Resolution:
+     - Enter reward amount 
+     - Verify sufficient wallet balance
+     - Allocate reward from company wallet in the preferd format as requested by whistle blower
+   ↓
+   Transfer the reward amount to Anonymous Wallet
+   ↓
+   Record Transaction in database
+   ↓
+   Send Claim Instructions to Whistleblower
+   ↓
+   Whistleblower Claims Reward (Optional)
+   ```
+
+#### 7. **Professional Service Request Flow (marketplace)**
+   ```
+   Organizational Administrator logs in with organization-provided credentials
+   ↓
+   Access Professional Services Dashboard
+   ↓
+   Filter by Service Category & Specialization (Organization Administrator)
+   ↓
+   Review Provider Profiles (Credentials, Ratings, Availability)
+   ↓
+   Select Provider & Submit Service Request
+   ↓
+   Provider Notification & Response
+   ↓
+   Service Confirmation & Case Linking
+   ↓
+   Secure Collaboration Channel Creation
+   ↓
+   Service Delivery & Documentation
+   ↓
+   Payment Processing & Review Submission
    ```
 
 ## 2. Core Infrastructure
@@ -966,7 +1065,7 @@ aegisv11/
 │   │   └── styles/          # Global styles and Tailwind configuration
 │   ├── tests/               # Frontend test files
 │   └── package.json         # Frontend dependencies
-│   |
+├── backend/                # backend application
 │   ├── src/
 │   │   ├── core/                    # Core application modules
 │   │   │   ├── routes/             # Core API routes
@@ -994,11 +1093,32 @@ aegisv11/
 │   │   │   │   ├── notifications/ # Report notifications
 │   │   │   │   └── services/
 │   │   │   │
-│   │   │   └── maps/             # Maps integration module
-│   │   │       ├── routes/
-│   │   │       ├── controllers/
-│   │   │       ├── cache/        # Map data caching
-│   │   │       └── services/
+│   │   │   ├── maps/             # Maps integration module
+│   │   │   │   ├── routes/
+│   │   │   │   ├── controllers/
+│   │   │   │   ├── cache/        # Map data caching
+│   │   │   │   └── services/
+│   │   │   │
+│   │   │   ├── voice/            # Voice processing module
+│   │   │   │   ├── routes/       # Voice API endpoints
+│   │   │   │   ├── controllers/  # Voice processing logic
+│   │   │   │   ├── cache/        # Voice data caching
+│   │   │   │   ├── services/     # VAPI integration
+│   │   │   │   └── utils/        # Voice processing utilities
+│   │   │   │
+│   │   │   ├── video/            # Video processing module
+│   │   │   │   ├── routes/       # Video API endpoints
+│   │   │   │   ├── controllers/  # Video processing logic
+│   │   │   │   ├── cache/        # Video data caching
+│   │   │   │   ├── services/     # Tavus integration
+│   │   │   │   └── utils/        # Video processing utilities
+│   │   │   │
+│   │   │   └── blockchain/       # Blockchain integration module
+│   │   │       ├── routes/       # Blockchain API endpoints
+│   │   │       ├── controllers/  # Blockchain operations
+│   │   │       ├── cache/        # Blockchain data caching
+│   │   │       ├── services/     # Hyperledger integration
+│   │   │       └── contracts/    # Smart contract definitions
 │   │   │
 │   │   ├── config/                # Application configuration
 │   │   │   ├── database.js        # Database config
@@ -1606,7 +1726,7 @@ interface Organization {
       min: number;
       max: number;
     };
-    crypto_options: string[]; // ['USDC', 'ETH']
+    crypto_options: string[]; // ['USDC', 'ETH', 'BTC']
     database_type: 'postgresql' | 'mysql' | 'mongodb' | 'hyperledger_fabric';
     cross_department_escalation: boolean;
     branding: {

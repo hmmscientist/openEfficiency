@@ -88,6 +88,10 @@ aegisv11/
 - [ ] Create anonymous ID generation
 - [ ] Set up file upload functionality
 - [ ] Build report tracking system
+- [ ] Build case assignment system
+- [ ] Implement investigation workflow
+- [ ] Create case status tracking
+- [ ] Add case communication tools
 
 **Day 4: Voice Integration**
 - [ ] Enhance existing VAPI integration
@@ -102,11 +106,6 @@ aegisv11/
 - [ ] Set up video storage and processing
 - [ ] Create video playback interface
 
-**Day 6: Case Management**
-- [ ] Build case assignment system
-- [ ] Implement investigation workflow
-- [ ] Create case status tracking
-- [ ] Add case communication tools
 
 #### **Days 7-8: Dashboard Development**
 **Day 7: Role-Specific Dashboards**
